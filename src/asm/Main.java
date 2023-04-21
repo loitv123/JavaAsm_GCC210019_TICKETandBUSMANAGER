@@ -48,7 +48,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         initTableBus();//ham initable 
         loadCbTime();
-
+        
         tbBus.setDefaultEditor(Object.class, null);
         tbTotal.setDefaultEditor(Object.class, null);
         cardLayout = (CardLayout) contentPanel.getLayout();
@@ -74,7 +74,7 @@ public class Main extends javax.swing.JFrame {
         }
 
         updateTotalPrice();
-
+        
         this.setLocationRelativeTo(null);
     }
 
@@ -106,6 +106,17 @@ public class Main extends javax.swing.JFrame {
         }
         cbTrip.setModel(cbTripModel);
     }
+    private void RefreshTripListAction() {
+//        cbTrip.removeAllElements();
+        cbTrip.removeAllItems();
+        loadCbTrip();
+//        cbTripModel.addElement("Choose your trip");
+//    for (busModel c : BusList) {     
+//       cbTripModel.addElement(c.getTrip());
+//    }
+//     cbTrip.setModel(cbTripModel);
+    }
+ 
 
     private void fillToTable() {
         tbModel2.setRowCount(0);
@@ -205,6 +216,7 @@ public class Main extends javax.swing.JFrame {
         rdNo = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
         txtSeat = new javax.swing.JTextField();
+        btnRefresh = new javax.swing.JButton();
         Bus = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbBus = new javax.swing.JTable();
@@ -394,6 +406,14 @@ public class Main extends javax.swing.JFrame {
 
         txtSeat.setEditable(false);
 
+        btnRefresh.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout TicketLayout = new javax.swing.GroupLayout(Ticket);
         Ticket.setLayout(TicketLayout);
         TicketLayout.setHorizontalGroup(
@@ -401,9 +421,11 @@ public class Main extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, TicketLayout.createSequentialGroup()
                 .addGroup(TicketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(TicketLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(176, 176, 176)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(btnTicClear, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
+                        .addGap(18, 18, 18)
                         .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(TicketLayout.createSequentialGroup()
                         .addGap(27, 27, 27)
@@ -485,8 +507,9 @@ public class Main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(TicketLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTicClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(37, 37, 37))
+                    .addComponent(btnTicClear, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
+                .addGap(35, 35, 35))
         );
 
         contentPanel.add(Ticket, "Ticket");
@@ -848,11 +871,22 @@ public class Main extends javax.swing.JFrame {
 
     private void btnCheckOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckOutActionPerformed
         // TODO add your handling code here:
-        clearTotalTable();
+        CheckOutTotalTable();
 //        printTotalToFile();
         updateTotalPrice();
     }//GEN-LAST:event_btnCheckOutActionPerformed
-    private void clearTotalTable() {
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        
+        RefreshTripListAction();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+    private void CheckOutTotalTable() {
+        DefaultTableModel model = (DefaultTableModel) tbTotal.getModel();
+        if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No data to checkout!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         int choice = JOptionPane.showConfirmDialog(this, "You want to print the bill?");
         if (choice == JOptionPane.YES_OPTION) {
             printTotalToFile();
@@ -879,13 +913,13 @@ public class Main extends javax.swing.JFrame {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
-private void checkPhone() {
-    String phone = txtPhone.getText().trim();
-    if (phone.length() != 10 || !phone.matches("\\d+")) {
-        JOptionPane.showMessageDialog(this, "Invalid phone number. Please enter a 10-digit number.");
-        txtPhone.requestFocus();
+    private void checkPhone() {
+        String phone = txtPhone.getText().trim();
+        if (phone.length() != 10 || !phone.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Invalid phone number. Please enter a 10-digit number.");
+            txtPhone.requestFocus();
+        }
     }
-}
     private void BuyTicInfor() {
         String busCode = txtBusCode.getText();
         String busNumber = txtBusNumber.getText();
@@ -1095,6 +1129,7 @@ private void checkPhone() {
 
         TicketModel t = new TicketModel(id, customerPhone, price, busID);
         TicList.add(t);
+        
     }
 
     private void saveFileBus() {
@@ -1153,6 +1188,7 @@ private void checkPhone() {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnExit;
     private javax.swing.ButtonGroup btnGrTrip;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSortByPrice;
     private javax.swing.JButton btnTicClear;
     private javax.swing.JButton btnUpdate;
