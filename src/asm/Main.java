@@ -72,9 +72,7 @@ public class Main extends javax.swing.JFrame {
         } else {
             showMess("No info");
         }
-
-        updateTotalPrice();
-        
+        updateTotalPrice();      
         this.setLocationRelativeTo(null);
     }
 
@@ -859,7 +857,7 @@ public class Main extends javax.swing.JFrame {
 
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         // TODO add your handling code here:
-        checkPhone(); 
+//        checkPhone(); 
         BuyTicInfor();
 //        AddTic();      
         fillToTableTic();
@@ -918,6 +916,7 @@ public class Main extends javax.swing.JFrame {
         if (phone.length() != 10 || !phone.matches("\\d+")) {
             JOptionPane.showMessageDialog(this, "Invalid phone number. Please enter a 10-digit number.");
             txtPhone.requestFocus();
+            return;
         }
     }
     private void BuyTicInfor() {
@@ -932,6 +931,12 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Please enter all required information", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+                if (phone.length() != 10 || !phone.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Invalid phone number. Please enter a 10-digit number.");
+            txtPhone.requestFocus();
+            return;
+        }
+//        checkPhone(); 
         AddTic();  
         clearFields();
         String message = "Bus Code: " + busCode + "\n"
@@ -953,41 +958,35 @@ public class Main extends javax.swing.JFrame {
         rdNo.setSelected(true);
     }
 
+    //Clear fucntion
     private void clearInput() {
-
         txtBusId.setText("");
         txtBusLisense.setText("");
         txtBusTrip.setText("");
         cbTime.setSelectedIndex(0);
         txtBusPrice.setText("");
-
     }
     private boolean checkUpdateAction(){
         if (txtBusId.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus ID", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if (txtBusLisense.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus License", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if (txtBusTrip.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus Trip", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if (cbTime.getSelectedItem().toString().equals("Choose your time")) {
             JOptionPane.showMessageDialog(null, "Please select the Bus Time", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if (txtBusPrice.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus Price", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
-        }
-        
+        }        
         String price = txtBusPrice.getText().trim();
         try {
             double dPrice = Double.parseDouble(price);
@@ -1002,46 +1001,33 @@ public class Main extends javax.swing.JFrame {
         updateBus();
         return false;
     }
+    //Check before add
     private boolean checkAddAction() {
         if (txtBusId.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus ID", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
+            return false;        }
         if (txtBusLisense.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus License", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
+            return false;        }
         if (txtBusTrip.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus Trip", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
+            return false;        }
         if (cbTime.getSelectedItem().toString().equals("Choose your time")) {
             JOptionPane.showMessageDialog(null, "Please select the Bus Time", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
+            return false;       }
         if (txtBusPrice.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Please enter the Bus Price", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-        
+            return false;       }
         String price = txtBusPrice.getText().trim();
         try {
             double dPrice = Double.parseDouble(price);
             if (dPrice < 0) {
                 JOptionPane.showMessageDialog(null, "Price cannot be negative", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-        } catch (NumberFormatException e) {
+                return false;}       } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Price must be a number", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+            return false;    }
         AddBus();
-        return true;
-        
+        return true;     
     }
 //    private boolean validatePrice() {
 //    String price = txtBusPrice.getText().trim();
@@ -1101,7 +1087,7 @@ public class Main extends javax.swing.JFrame {
 //        b.setPrice(txt);
         b.setPrice(Integer.parseInt(txtBusPrice.getText()));
     }
-
+//Add function 
     private void AddBus() {
 
         String BusId = txtBusId.getText();
@@ -1129,7 +1115,6 @@ public class Main extends javax.swing.JFrame {
 
         TicketModel t = new TicketModel(id, customerPhone, price, busID);
         TicList.add(t);
-        
     }
 
     private void saveFileBus() {
